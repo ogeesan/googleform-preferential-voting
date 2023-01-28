@@ -44,17 +44,25 @@ I’ll go through some settings used in my Google Forms
 
 It’s described in the flowchart below, and also in [the Australian Electoral Commission’s Senate vote counting guide](https://www.aec.gov.au/learn/files/poster-count-senate-pref-voting.pdf). The quota is determined using the following:
 
-$\textrm{quota}=\lfloor\frac{\textrm{\# formal votes}}{\textrm{\# vacancies} + 1}\rfloor + 1$
+```math
+\textrm{quota}=\lfloor\frac{\textrm{\# formal votes}}{\textrm{\# vacancies} + 1}\rfloor + 1
+```
 
 In essence, with 100 ballots and 1 vacancy the quota would be 51, with 2 vacancies the quota would be 34.
 
 If the position being elected has only one winner, then the quota is going to be a majority and the transfer of value will never happen (in the flowchart “Are the required number of positions filled?” can only be Yes).
 
-If, after a round of counting, a number of candidates have passed the quota and not all vacancies have been filled the transfer system is activated.
+If, after a round of counting, a number of candidates have passed the quota and not all vacancies have been filled the transfer system is activated. Once a candidate wins a position, their votes are redistributed into the pool with decreased value:
 
-Once a candidate wins a position, their votes are redistributed into the pool with decreased value:
+```math
+\textrm{surplus} = \textrm{\# total votes} - \textrm{quota}
+```
 
-$\textrm{transfer value} = \frac{\textrm{\# surplus votes}}{\textrm{\# total votes}}$ , where $\textrm{\# surplus votes} = \textrm{\# total votes} - \textrm{quota}$.
+```math
+\textrm{transfer value} = \frac{\textrm{surplus}}{\textrm{\# total votes}}$
+```
+
+The votes that contributed to the winning candidate then have their value multiplied (decreased) by $\textrm{transfer value}$.
 
 The rationale is that if there was a surplus, then technically there are votes that have no home to go to. Since it’s impossible to determine which votes were *the* key contributors, all of the votes are devalued and redistributed.
 
@@ -76,7 +84,7 @@ checkwinner{{"Are there candidate(s) who total above the quota?"}}
 transfer[Redistribute ballots for candidate with lowest total]
 reinsert[Re-insert winner ballots into pool with the decreased value]
 
-subgraph Basic Counting
+subgraph  
 	count --> checkwinner
 	
 	removewinner --> positionsfilled
